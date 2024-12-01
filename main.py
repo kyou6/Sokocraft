@@ -6,35 +6,20 @@ from pygame.locals import *
 from sys import exit
 #Read Image Unit
 pygame.init()
-Game_Screen = pygame.display.set_mode((768,768),0,32)
+Game_Screen = pygame.display.set_mode((800,800),0,32)
 Image_Help = pygame.image.load("source/help.png").convert()
-Image_Welcome = pygame.image.load("source/welcome.png").convert()
-Image_Box_Inplace = pygame.image.load("source/Box_Inplace.jpg").convert()
-Image_Box_Outplace = pygame.image.load("source/Box_Outplace.JPG").convert()
+Image_Box_Inplace = pygame.image.load("source/box_yes.png").convert()
+Image_Box_Outplace = pygame.image.load("source/box_no.png").convert()
 Game_Success = pygame.image.load("source/Success.jpg").convert()
-Image_Player = pygame.image.load("source/man.jpg").convert()
-Image_Goal = pygame.image.load("source/Goal.jpg").convert()
-Image_Wall = pygame.image.load("source/wall.jpg").convert()
-Image_Help = pygame.transform.scale(Image_Help,(768,768))
-Image_Welcome = pygame.transform.scale(Image_Welcome,(768,768))
+Image_Player = pygame.image.load("source/player.png").convert()
+Image_Goal = pygame.image.load("source/power.png").convert()
+Image_Wall = pygame.image.load("source/wall.png").convert()
+Image_Help = pygame.transform.scale(Image_Help,(800,800))
 Image_Box_Inplace = pygame.transform.scale(Image_Box_Inplace,(64,64))
 Image_Box_Outplace = pygame.transform.scale(Image_Box_Outplace,(64,64))
 Image_Player = pygame.transform.scale(Image_Player,(64,64))
 Image_Wall= pygame.transform.scale(Image_Wall,(64,64))
 Image_Goal = pygame.transform.scale(Image_Goal,(64,64))
-#Read1 Image Unit Done
-
-#The Map
-#0--------------------> x
-#|
-#|
-#|
-#|
-#|
-#|
-#v
-#y
-#Don't Mess the address
 
 #Debug Map
 def Debug_Map(alist):
@@ -218,29 +203,51 @@ def Move(dir):
     #else do nothing
     Display_refresh(Game_Screen)
 
-if __name__=="__main__":
-    Game_Screen.blit(Image_Welcome,(0,0))
-    pygame.display.update()
-    flag = True
-    while flag:
-        Game_Screen.blit(Image_Welcome,(0,0))
-        pygame.display.update()                    
+# Function to create the start menu
+def start_menu():
+    global Game_Screen
+    button_width = 200
+    button_height = 50
+    play_button = pygame.Rect(300, 250, button_width, button_height)  # Centered
+    help_button = pygame.Rect(300, 320, button_width, button_height)  # Centered
+    quit_button = pygame.Rect(300, 390, button_width, button_height)  # Centered
+
+    while True:
+        Game_Screen.fill((255, 255, 255))  # Clear the screen
+        pygame.draw.rect(Game_Screen, (0, 0, 0), play_button)  # Draw Play button
+        pygame.draw.rect(Game_Screen, (0, 0, 0), help_button)  # Draw Help button
+        pygame.draw.rect(Game_Screen, (0, 0, 0), quit_button)  # Draw Quit button
+
+        play_label = Game_font.render('Play Game', True, (255, 255, 255))
+        help_label = Game_font.render('Help', True, (255, 255, 255))
+        quit_label = Game_font.render('Quit', True, (255, 255, 255))
+
+        Game_Screen.blit(play_label, (play_button.x + (play_button.width / 2 - play_label.get_width() / 2), 
+                                       play_button.y + (play_button.height / 2 - play_label.get_height() / 2)))
+        Game_Screen.blit(help_label, (help_button.x + (help_button.width / 2 - help_label.get_width() / 2), 
+                                       help_button.y + (help_button.height / 2 - help_label.get_height() / 2)))
+        Game_Screen.blit(quit_label, (quit_button.x + (quit_button.width / 2 - quit_label.get_width() / 2), 
+                                       quit_button.y + (quit_button.height / 2 - quit_label.get_height() / 2)))
+
+        pygame.display.update()
+
         for event in pygame.event.get():
             if event.type == QUIT:
-                pygame.display.quit()
+                pygame.quit()
                 exit()
-            if event.type == KEYDOWN:
-                if event.key == 49:
-                    flag=False
-                    break
-                if event.key == 50:
-                    Game_Screen.blit(Image_Help,(0,0))
-                    pygame.display.update()
-                    time.sleep(3)
-                if event.key == 51:
-                    pygame.display.quit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if play_button.collidepoint(event.pos):
+                    return  # Start the game
+                if help_button.collidepoint(event.pos):
+                    # Display help (you can implement this)
+                    print("Help section not implemented yet.")
+                if quit_button.collidepoint(event.pos):
+                    pygame.quit()
                     exit()
 
+# Main execution
+if __name__ == "__main__":
+    start_menu()  # Call the start menu instead of displaying the welcome screen
     Game_Screen = Defult()
     Display_refresh(Game_Screen)
     print( Player_Pos)
@@ -248,17 +255,17 @@ if __name__=="__main__":
     while True:
         for event in pygame.event.get():
             if event.type  ==KEYDOWN:
-                if event.key == K_UP:
+                if event.key == K_w:
                     Move(0)
-                elif event.key == K_DOWN:
+                elif event.key == K_s:
                     Move(1)
-                elif event.key == K_LEFT:
+                elif event.key == K_a:
                     Move(2)
-                elif event.key == K_RIGHT:
+                elif event.key == K_d:
                     Move(3)
-                elif event.key == 114:
+                elif event.key == K_q:
                     Undo()
-                elif event.key == K_SPACE:
+                elif event.key == K_e:
                     Redo()
                 elif event.key == 27:
                     pygame.display.quit()

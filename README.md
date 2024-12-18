@@ -1,5 +1,6 @@
 # Sokocraft
-A Sokoban Minecraft-inspired game
+A Sokoban Minecraft-inspired game made on PyGame
+<img width=100% src="https://github.com/user-attachments/assets/e79a84ae-5538-4d22-9a3f-5464153b54c0">
 
 **Forked from:** [KIDJourney/Sokoban_Pygame](https://github.com/KIDJourney/Sokoban_Pygame)
 
